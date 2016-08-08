@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -27,18 +28,35 @@ public class MainActivity extends AppCompatActivity {
 
         WebView webView = (WebView) findViewById(R.id.webview);
 
-        webView.clearCache(true);
+           webView.clearCache(true);
+//
+//        WebSettings webSettings = webView.getSettings();
+//        webSettings.setJavaScriptEnabled(true);
+//
+//        webView.setWebChromeClient(new WebChromeClient());
+//
+//                WebViewClientImpl webViewClient = new WebViewClientImpl(this);
+//        webView.setWebViewClient(webViewClient);
+//
+//
+//        webView.setWebViewClient(new WebViewClient() {
+//        // override all the methods
+//        });
 
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
+        webView.addJavascriptInterface(new WebAppInterface(this), "Android");
 
-        webView.setWebChromeClient(new WebChromeClient());
-
-                WebViewClientImpl webViewClient = new WebViewClientImpl(this);
-        webView.setWebViewClient(webViewClient);
+        webView.loadUrl("http://192.168.0.102:4000");
 
 
-        webView.loadUrl("http://192.168.0.104:3000");
+
+  //     webView.loadUrl("file:///android_asset/www/index.html");
+
+//        String data = "<!DOCTYPE html>";
+//        data += "<head><title>Hello World</title></head>";
+//        data += "<body>Welcome to the WebView</body>";
+//        data += "</html>";
+// args: data, mimeType, encoding
+     //   webView.loadData(data, "text/html", "UTF-8");
 
     }
 
@@ -60,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return super.shouldOverrideUrlLoading(view, request);
+        }
 
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
